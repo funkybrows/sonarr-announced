@@ -14,9 +14,10 @@ def get_tl_client():
     return client
 
 
-# client = get_tl_client()
-# client.run(
-#     hostname=tl["irc_host"],
-#     port=tl["irc_port"],
-#     tls=tl["irc_tls"],
-# )
+if __name__ == "__main__":
+    client = get_tl_client()
+    client.run(
+        hostname=tl["irc_host"],
+        port=tl["irc_port"],
+        tls=tl["irc_tls"],
+    )
