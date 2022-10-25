@@ -89,15 +89,26 @@ async def test_tracker_connects():
     with open(file_path) as f:
         assert "Registration Timeout" in f.read()
 
-    async def is_connected():
-        counter = 0
+
+@pytest.mark.asyncio
+async def test_stop_runforever(event_loop):
+    from threading import Thread
+
+    nest_asyncio.apply(event_loop)
+    new_loop = asyncio.new_event_loop()
+
+    async def do_something_forever_until():
+        counter = 1
         while counter < 5:
-            with open("testOutput/connects.txt") as f:
-                if "CONNECTED" in f.read():
-                    return True
-            counter += 1
             await asyncio.sleep(1)
-        return False
+            counter += 1
+        thread = Thread(target=new_loop.call_soon_threadsafe(new_loop.stop))
+        thread.start()
+
+    new_loop.create_task(do_something_forever_until())
+    new_loop.run_forever()
+
+
 
     client = TestIRCClient(cfg["torrentleech.nick"])
     client.set_tracker(get_tl_client())
