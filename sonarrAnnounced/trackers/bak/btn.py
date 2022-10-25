@@ -38,21 +38,31 @@ def parse(announcement):
     decolored = utils.strip_irc_color_codes(announcement)
 
     # extract required information from decolored
-    if 'NOW BROADCASTING' in decolored:
-        torrent_title = utils.substr(decolored, '[ ', ' ]', True)
+    if "NOW BROADCASTING" in decolored:
+        torrent_title = utils.substr(decolored, "[ ", " ]", True)
     torrent_id = utils.get_id(decolored, 1)
 
     # pass announcement to sonarr
     if torrent_id is not None and torrent_title is not None:
-        download_link = get_torrent_link(torrent_id, utils.replace_spaces(torrent_title, '.'))
+        download_link = get_torrent_link(
+            torrent_id, utils.replace_spaces(torrent_title, ".")
+        )
 
-        announced = db.Announced(date=datetime.datetime.now(), title=utils.replace_spaces(torrent_title, '.'),
-                                 indexer=name, torrent=download_link)
+        announced = db.Announced(
+            date=datetime.datetime.now(),
+            title=utils.replace_spaces(torrent_title, "."),
+            indexer=name,
+            torrent=download_link,
+        )
         approved = sonarr.wanted(torrent_title, download_link, name)
         if approved:
             logger.debug("Sonarr approved release: %s", torrent_title)
-            snatched = db.Snatched(date=datetime.datetime.now(), title=utils.replace_spaces(torrent_title, '.'),
-                                   indexer=name, torrent=download_link)
+            snatched = db.Snatched(
+                date=datetime.datetime.now(),
+                title=utils.replace_spaces(torrent_title, "."),
+                indexer=name,
+                torrent=download_link,
+            )
         else:
             logger.debug("Sonarr rejected release: %s", torrent_title)
         torrent_title = None
@@ -60,8 +70,9 @@ def parse(announcement):
 
 # Generate torrent link
 def get_torrent_link(torrent_id, torrent_name):
-    torrent_link = "https://broadcasthe.net/torrents.php?action=download&id={}&authkey={}&torrent_pass={}" \
-        .format(torrent_id, auth_key, torrent_pass)
+    torrent_link = "https://broadcasthe.net/torrents.php?action=download&id={}&authkey={}&torrent_pass={}".format(
+        torrent_id, auth_key, torrent_pass
+    )
     return torrent_link
 
 
