@@ -51,38 +51,43 @@ async def test_asyncio():
         await task
 
 
+@pytest.mark.asyncio
+async def test_tracker_connects():
+    file_path = "./tests/testOutput/connects.txt"
+    with open(file_path, "w") as f:
         pass
 
     class TestIRCClient(IRCClient):
-        async def on_data(self, data):
-            try:
-                with open("./tests/testOutput/connects.txt", "a") as f:
-                    f.write("CONNECTED2")
-                    f.write(data)
-            except Exception:
-                # logger.exception("Didn't work")
-                pass
+        async def connect(self, hostname=None, port=None, reconnect=False, **kwargs):
+            if (not hostname or not port) and not reconnect:
+                logger.error("Have to specify hostname and port if not reconnecting.")
+                raise ValueError(
+                    "Have to specify hostname and port if not reconnecting."
+                )
+
+            # Reset attributes and connect.
+            if not reconnect:
+                self._reset_connection_attributes()
+            await self._connect(
+                hostname=hostname, port=port, reconnect=reconnect, **kwargs
+            )
+
+            await self.handle_forever()
 
         async def handle_forever(self):
-            if self.connected:
-                with open("./tests/testOutput/connects.txt", "a") as f:
-                    f.write("CONNECTED")
-                try:
-                    data = await self.connection.recv(timeout=self.READ_TIMEOUT)
-                except asyncio.TimeoutError:
-                    pass
-                with open("./tests/testOutput/connects.txt", "a") as f:
-                    f.write("HERE")
-                if not data:
-                    # logger.error("No data recieved")
-                    raise Exception("No data recieved")
+            data = await self.connection.recv(timeout=self.READ_TIMEOUT)
+            with open(file_path, "a") as f:
+                f.write(data.decode("utf-8"))
 
-            else:
-                raise Exception("No connection")
-            await self.on_data(data)
+    client = TestIRCClient(cfg["torrentleech.nick"])
+    client.set_tracker(get_tl_client())
+    tl = Trackers().get_tracker("torrentleech")
 
-    async def do_sleep():
-        await asyncio.sleep(4)
+    await client.connect(
+        hostname=tl["irc_host"], port=tl["irc_port"], tls=tl["irc_tls"]
+    )
+    with open(file_path) as f:
+        assert "Registration Timeout" in f.read()
 
     async def is_connected():
         counter = 0
