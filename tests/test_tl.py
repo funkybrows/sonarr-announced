@@ -2,8 +2,11 @@ import asyncio
 import logging
 import sys
 from pathlib import Path
+from threading import Thread
+from time import time
 
 
+import nest_asyncio
 import pytest
 from sonarrAnnounced.trackers import Trackers
 from sonarrAnnounced.irc import IRCClient, cfg
@@ -109,25 +112,26 @@ async def test_stop_runforever(event_loop):
     new_loop.run_forever()
 
 
+@pytest.mark.asyncio
+async def test_tracker_registration():
+
+    file_path = "./tests/testOutput/connects.txt"
+    with open(file_path, "w") as f:
+        pass
+
+    class TestIRCClient(IRCClient):
+        async def connect(self, *args, **kwargs):
+            await super().connect(*args, **kwargs)
+            await self.on_connect()
+            with open(file_path, "a") as f:
+                f.write("JOINED")
 
     client = TestIRCClient(cfg["torrentleech.nick"])
-    client.set_tracker(get_tl_client())
+    client.set_tracker(Trackers().get_tracker("torrentleech"))
     tl = Trackers().get_tracker("torrentleech")
-
-    task_1 = asyncio.create_task(
+    # XXX: We're cutting off self.handle_forever, which will trigger a warning
+    await (
         client.connect(hostname=tl["irc_host"], port=tl["irc_port"], tls=tl["irc_tls"])
     )
-    # task_2 = asyncio.create_task(do_sleep())
-    await task_1
-    stop
-    # result = await task_2
-    # assert result
-
-
-# client = IRCClient("cap_with_both_knees")
-# client.set_tracker(tl)
-# client.run(
-#     hostname=tl["irc_host"],
-#     port=tl["irc_port"],
-#     tls=tl["irc_tls"],
-# )
+    with open(file_path) as f:
+        assert "JOINED" in f.read()
