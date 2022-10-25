@@ -25,8 +25,32 @@ def get_tl():
 
 
 @pytest.mark.asyncio
-async def test_tracker_connects():
-    with open("./tests/testOutput/connects.txt", "w") as f:
+async def test_asyncio():
+    start = time()
+
+    async def do_this():
+        logger.debug("Do this at %s", time() - start)
+        task_1 = asyncio.create_task(asyncio.sleep(2))
+        task_2 = asyncio.create_task(do_that())
+        await task_1
+        await task_2
+
+    async def do_that():
+        logger.debug("Do that at %s", time() - start)
+        await asyncio.sleep(2)
+
+    async def do_these():
+        logger.debug("Do these at %s", time() - start)
+        await asyncio.sleep(2)
+
+    tasks = []
+    for _ in range(3):
+        tasks.append(asyncio.create_task(do_this()))
+        tasks.append(asyncio.create_task(do_these()))
+    for task in tasks:
+        await task
+
+
         pass
 
     class TestIRCClient(IRCClient):
