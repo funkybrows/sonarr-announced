@@ -23,7 +23,7 @@ class SonarrClient(SonarrAPI):
         cat_match = re.search(cat_pattern, msg)
         cat = msg[cat_match.start(0) : cat_match.end(0)]
         msg = msg[prefix_match.end(0) :]
-        link_pattern = r"http[s]?://www.torrentleech.[\w]*/[\w]*/[\d]*"
+        link_pattern = r"http[s]?://www.torrentleech.[\w]*/[\w]*/[\d]+"
         match = re.search(link_pattern, msg)
         link = msg[match.start(0) :]
         msg = msg[: match.start(0)]
