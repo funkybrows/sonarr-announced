@@ -76,18 +76,20 @@ class IRCClient(
                 push_release_response = sonarr_client.push_torrent_release(
                     parsed_title, url
                 )
-                if (
-                    push_release_response["approved"]
-                    or push_release_response["quality"]["quality"]["resolution"] == 720
-                ):
-                    deluge_client.add_torrent_from_url(parsed_title, url)
-                else:
-                    logger.debug(
-                        "Title: %s with url: %s not approved, %s",
-                        parsed_title,
-                        url,
-                        push_release_response,
-                    )
+                try:
+                    if push_release_response["approved"] or push_release_response[
+                        "quality"
+                    ]["quality"]["resolution"] in (480, 720):
+                        deluge_client.add_torrent_from_url(parsed_title, url)
+                    else:
+                        logger.debug(
+                            "Title: %s with url: %s not approved, %s",
+                            parsed_title,
+                            url,
+                            push_release_response,
+                        )
+                except KeyError:
+                    logger.exception("Unhandled case for %s", push_release_response)
 
     async def on_invite(self, channel, by):
         if channel == self.tracking["irc_channel"]:
