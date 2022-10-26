@@ -77,9 +77,7 @@ class IRCClient(
                     parsed_title, url
                 )
                 try:
-                    if push_release_response["approved"] or push_release_response[
-                        "quality"
-                    ]["quality"]["resolution"] in (480, 720):
+                    if push_release_response["approved"]:
                         deluge_client.add_torrent_from_url(parsed_title, url)
                     else:
                         logger.debug(
@@ -90,6 +88,8 @@ class IRCClient(
                         )
                 except KeyError:
                     logger.exception("Unhandled case for %s", push_release_response)
+                except Exception:
+                    logger.exception("Unexpected case for %s", push_release_response)
 
     async def on_invite(self, channel, by):
         if channel == self.tracking["irc_channel"]:
