@@ -65,7 +65,24 @@ class IRCClient(
         if source[0] != "#":
             logger.debug("%s sent us a message: %s", target, message)
         else:
-            self.tracking["plugin"].parse(message)
+            logger.debug("Message: %s, type: %s", [message], type(message))
+            parsed_title, url = sonarr_client.get_parsed_tl_announcement(message)
+            if parsed_title:
+                push_release_response = sonarr_client.push_torrent_release(
+                    parsed_title, url
+                )
+                if (
+                    push_release_response["approved"]
+                    or push_release_response["quality"]["quality"]["resolution"] == 720
+                ):
+                    deluge_client.add_torrent_from_url(parsed_title, url)
+                else:
+                    logger.debug(
+                        "Title: %s with url: %s not approved, %s",
+                        parsed_title,
+                        url,
+                        push_release_response,
+                    )
 
     def on_invite(self, channel, by):
         if channel == self.tracking["irc_channel"]:
