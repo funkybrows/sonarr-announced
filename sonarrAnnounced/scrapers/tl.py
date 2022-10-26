@@ -23,7 +23,7 @@ def login():
 def get_torrent_from_url(url):
     domain = re.search(r"http[s]?://www.torrentleech.[\w]+", url).group(0)
     session = login()
-    r = session.get("https://www.torrentleech.org/torrent/240921196")
+    r = session.get(url)
     torrent_info_match = re.search(r'href=("/[\S]+")>Download[\s]+Torrent', r.text)
     relative_torrent_url = re.sub(r'href="', "", torrent_info_match.group(0)).split(
         '"'
