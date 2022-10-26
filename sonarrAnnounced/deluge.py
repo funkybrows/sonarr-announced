@@ -21,6 +21,7 @@ class DelugeTlRpcClient(DelugeRPCClient):
                 logger.exception("Failed to connect to deluge client")
 
     def add_torrent_from_url(self, title, url):
+        self.connect_if_necessary()
         torrent_data = get_torrent_from_url(url)
         result = self.call(
             "core.add_torrent_file",
