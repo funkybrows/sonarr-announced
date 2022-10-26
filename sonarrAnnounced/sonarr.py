@@ -27,8 +27,9 @@ class SonarrClient(SonarrAPI):
         match = re.search(link_pattern, msg)
         link = msg[match.start(0) : match.end(0)]
         msg = msg[: match.start(0)]
-        msg = re.sub("uploaded.*", "", msg)
-        return self.get_parsed_title(msg), link
+        msg = re.sub("'[\s]+uploaded.*", "", msg)
+        return self.get_parsed_title(msg)["title"], link
+
 
 def get_sonarr_client():
 
