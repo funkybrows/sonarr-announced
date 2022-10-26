@@ -2,7 +2,6 @@ from base64 import b64encode
 from sonarrAnnounced.deluge import get_deluge_client
 from sonarrAnnounced.scrapers.tl import (
     get_torrent_from_url as get_tl_torrent_from_url,
-    get_torrent_url_from_url as get_tl_torrent_url_from_url,
 )
 from sonarrAnnounced.sonarr import get_sonarr_client
 from sonarrAnnounced import config
@@ -22,5 +21,5 @@ cfg = config.init()
 
 
 def test_connect():
-    deluge_client.connect()
+    deluge_client.connect_if_necessary()
     assert deluge_client.connected
