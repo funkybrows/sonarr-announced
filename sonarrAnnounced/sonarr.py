@@ -11,6 +11,33 @@ logger.setLevel(logging.DEBUG)
 cfg = config.init()
 
 
+class SonarrClient(SonarrAPI):
+    def get_parsed_tl_announcement(self, msg):
+        logger.debug("GOT MESSAGE %s, type %s", str([msg]), type(msg))
+        prefix_pattern = r"New Torrent Announcement:[\d]+(,)?(\d+)?(\s+).+Name:"
+        prefix_match = re.search(prefix_pattern, msg)
+        if not prefix_match:  # Announcebot may have changed
+            logger.error("%s is not a valid TL announcement", msg)
+            return None, None
+        cat_pattern = r"<\w+(\s+)?(:+)?(\s+)[\w\s]+>"
+        cat_match = re.search(cat_pattern, msg)
+        cat = msg[cat_match.start(0) : cat_match.end(0)]
+        msg = msg[prefix_match.end(0) :]
+        link_pattern = r"http[s]?://www.torrentleech.[\w]*/[\w]*/[\d]*"
+        match = re.search(link_pattern, msg)
+        link = msg[match.start(0) :]
+        msg = msg[: match.start(0)]
+        msg = re.sub("uploaded.*", "", msg)
+        return self.get_parsed_title(msg), link
+
+def get_sonarr_client():
+
+    api_key = cfg["sonarr.apikey"]
+    url = cfg["sonarr.url"]
+
+    return SonarrClient(url, api_key)
+
+
 def wanted(title, download_link, indexer):
     global cfg
     approved = False
