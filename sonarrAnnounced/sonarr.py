@@ -1,7 +1,9 @@
-import datetime
+import datetime as dt
 import logging
 
+import re
 import requests
+from pyarr import SonarrAPI
 
 from sonarrAnnounced import utils
 from sonarrAnnounced import config
@@ -30,6 +32,14 @@ class SonarrClient(SonarrAPI):
         msg = re.sub("'[\s]+uploaded.*", "", msg)
         return self.get_parsed_title(msg)["title"], link
 
+    def push_torrent_release(self, parsed_title, url):
+        return self.push_release(
+            parsed_title,
+            url,
+            "Torrent",
+            (dt.datetime.utcnow() - dt.timedelta(minutes=10)).isoformat(),
+        )
+
 
 def get_sonarr_client():
 
@@ -52,7 +62,7 @@ def wanted(title, download_link, indexer):
         "title": utils.replace_spaces(title, "."),
         "downloadUrl": download_link,
         "protocol": "Torrent",
-        "publishDate": datetime.datetime.now().isoformat(),
+        "publishDate": dt.datetime.now().isoformat(),
         "indexer": indexer,
     }
 
