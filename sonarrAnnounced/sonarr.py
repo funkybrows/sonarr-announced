@@ -14,7 +14,7 @@ cfg = config.init()
 class SonarrClient(SonarrAPI):
     def get_parsed_tl_announcement(self, msg):
         logger.debug("GOT MESSAGE %s, type %s", str([msg]), type(msg))
-        prefix_pattern = r"New Torrent Announcement:[\d]+(,)?(\d+)?(\s+).+Name:"
+        prefix_pattern = r"New Torrent Announcement:.+Name:'"
         prefix_match = re.search(prefix_pattern, msg)
         if not prefix_match:  # Announcebot may have changed
             logger.error("%s is not a valid TL announcement", msg)
