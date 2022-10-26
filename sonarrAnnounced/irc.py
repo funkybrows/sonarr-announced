@@ -6,6 +6,8 @@ import pydle
 import pydle.client
 
 from sonarrAnnounced import config
+from sonarrAnnounced import deluge
+from sonarrAnnounced import sonarr
 
 logger = logging.getLogger(__name__)
 # logger = logging.getLogger("IRC")
@@ -15,6 +17,11 @@ handler.setLevel(logging.DEBUG)
 logger.addHandler(handler)
 
 cfg = config.init()
+
+
+# XXX: Make global fn
+sonarr_client = sonarr.get_sonarr_client()
+deluge_client = deluge.get_deluge_client()
 
 
 class IRCClient(
