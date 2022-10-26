@@ -47,8 +47,6 @@ class IRCClient(
         if nick_pass is not None and len(nick_pass) > 1:
             await self.rawmsg("NICKSERV", "IDENTIFY", nick_pass)
 
-        await self.join(self.tracking["irc_channel"])
-
     async def on_raw(self, message):
         await super().on_raw(message)
         logger.debug("MESSAGE: %s", message._raw)
