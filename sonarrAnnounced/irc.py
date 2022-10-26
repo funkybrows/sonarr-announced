@@ -61,7 +61,7 @@ class IRCClient(
             )
             self.join(self.tracking["irc_channel"])
 
-    def on_message(self, source, target, message):
+    async def on_message(self, source, target, message):
         if source[0] != "#":
             logger.debug("%s sent us a message: %s", target, message)
         else:
@@ -84,7 +84,7 @@ class IRCClient(
                         push_release_response,
                     )
 
-    def on_invite(self, channel, by):
+    async def on_invite(self, channel, by):
         if channel == self.tracking["irc_channel"]:
             self.join(self.tracking["irc_channel"])
 
