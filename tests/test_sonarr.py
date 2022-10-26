@@ -18,3 +18,8 @@ def test_parse():
     assert url == "https://www.torrentleech.org/torrent/240921295"
 
 
+def test_push_torrent_release():
+    msg = "\x02\x0300,04New Torrent Announcement:\x02\x0300,12 <TV :: Episodes HD>  Name:'Tell Me Lies S01E10 720p WEB H264-GLHF' uploaded by 'Anonymous' - \x0301,15 https://www.torrentleech.org/torrent/240921295"
+    parsed_title, url = client.get_parsed_tl_announcement(msg)
+    push_release_info = client.push_torrent_release(parsed_title, url)
+    assert push_release_info["rejected"] == True
