@@ -19,8 +19,7 @@ handler.setLevel(logging.DEBUG)
 logger.addHandler(handler)
 
 
-def make_dir():
-    Path("./tests/testOutput").mkdir(parents=True, exist_ok=True)
+Path("./tests/testOutput").mkdir(parents=True, exist_ok=True)
 
 
 def get_tl():
