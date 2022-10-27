@@ -23,3 +23,12 @@ def test_push_torrent_release():
     parsed_title, url = client.get_parsed_tl_announcement(msg)
     push_release_info = client.push_torrent_release(parsed_title, url)
     assert push_release_info["rejected"] == True
+
+
+def test_no_elements():
+    msg = "\x02\x0300,04New Torrent Announcement:\x02\x0300,12 <Games :: Nintendo Switch>  Name:'Cubic Figures Update v1 1 0 NSW-SUXXORS' uploaded by 'Anonymous' - \x0301,15 https://www.torrentleech.org/torrent/240922005"
+    parsed_title, url = client.get_parsed_tl_announcement(msg)
+    print(parsed_title, url)
+    push_release_info = client.push_torrent_release(parsed_title, url)
+    print(push_release_info)
+    stop
