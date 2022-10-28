@@ -31,7 +31,6 @@ def get_torrent_from_url(url):
     domain = re.search(r"http[s]?://www.torrentleech.[\w]+", url).group(0)
     session = login()
     r = session.get(url)
-    logger.debug("Response text", r.text)
     logger.debug("URL: %s", url)
     torrent_info_match = re.search(r'href=("/[\S]+")>Download[\s]+Torrent', r.text)
     relative_torrent_url = re.sub(r'href="', "", torrent_info_match.group(0)).split(
