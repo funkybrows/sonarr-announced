@@ -5,8 +5,8 @@ import re
 import requests
 from pyarr import SonarrAPI
 
-from sonarrAnnounced import utils
-from sonarrAnnounced import config
+from sonarr_announced import utils
+from sonarr_announced import config
 
 logger = logging.getLogger("SONARR")
 logger.setLevel(logging.DEBUG)

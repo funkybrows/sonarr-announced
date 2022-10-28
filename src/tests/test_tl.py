@@ -8,8 +8,8 @@ from time import time
 
 import nest_asyncio
 import pytest
-from sonarrAnnounced.trackers import Trackers
-from sonarrAnnounced.irc import IRCClient, cfg
+from sonarr_announced.trackers import Trackers
+from sonarr_announced.irc import IRCClient, cfg
 from test import get_tl_client
 
 logger = logging.getLogger(__name__)

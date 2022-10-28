@@ -1,8 +1,11 @@
+import sys
+
+print(sys.path)
 import asyncio
 import datetime as dt
 import nest_asyncio
 import pytest
-from sonarrAnnounced.sonarr import get_sonarr_client
+from sonarr_announced.sonarr import get_sonarr_client
 
 client = get_sonarr_client()
 

@@ -1,7 +1,7 @@
 import datetime
 import logging
 
-from sonarrAnnounced import config, db, sonarr, utils
+from sonarr_announced import config, db, sonarr, utils
 
 cfg = config.init()
 

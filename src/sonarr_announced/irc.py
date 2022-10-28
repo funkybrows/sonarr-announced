@@ -5,9 +5,9 @@ import sys
 import pydle
 import pydle.client
 
-from sonarrAnnounced import config
-from sonarrAnnounced import deluge
-from sonarrAnnounced import sonarr
+from sonarr_announced import config
+from sonarr_announced import deluge
+from sonarr_announced import sonarr
 
 logger = logging.getLogger(__name__)
 # logger = logging.getLogger("IRC")

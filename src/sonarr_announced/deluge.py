@@ -2,12 +2,12 @@ from base64 import b64encode
 import stringcase
 from deluge_client import DelugeRPCClient
 
-from sonarrAnnounced.scrapers.tl import get_torrent_from_url
+from sonarr_announced.scrapers.tl import get_torrent_from_url
 import logging
 
 logger = logging.getLogger("Deluge")
 logger.setLevel(logging.DEBUG)
-from sonarrAnnounced import config
+from sonarr_announced import config
 
 cfg = config.init()
 

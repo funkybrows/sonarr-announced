@@ -1,5 +1,5 @@
 from requests import Session
-from sonarrAnnounced.scrapers.tl import login, get_torrent_from_url
+from sonarr_announced.scrapers.tl import login, get_torrent_from_url
 
 
 def test_login():

@@ -1,10 +1,10 @@
 from base64 import b64encode
-from sonarrAnnounced.deluge import get_deluge_client
-from sonarrAnnounced.scrapers.tl import (
+from sonarr_announced.deluge import get_deluge_client
+from sonarr_announced.scrapers.tl import (
     get_torrent_from_url as get_tl_torrent_from_url,
 )
-from sonarrAnnounced.sonarr import get_sonarr_client
-from sonarrAnnounced import config
+from sonarr_announced.sonarr import get_sonarr_client
+from sonarr_announced import config
 import logging
 import sys
 

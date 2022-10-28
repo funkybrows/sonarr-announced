@@ -4,8 +4,8 @@ import sys
 print(sys.path)
 from pluginbase import PluginBase
 
-from sonarrAnnounced.config import cfg
-from sonarrAnnounced import utils
+from sonarr_announced.config import cfg
+from sonarr_announced import utils
 
 
 logger = logging.getLogger("TRACKERS")
@@ -19,8 +19,9 @@ class Trackers(object):
 
     def __init__(self):
         self.plugin_base = PluginBase(package="trackers")
+        print(f"{cfg['project_root']}/sonarr_announced/trackers", "HERE")
         self.source = self.plugin_base.make_plugin_source(
-            searchpath=[f"{cfg['project_root']}/sonarrAnnounced/trackers"],
+            searchpath=[f"{cfg['project_root']}/sonarr_announced/trackers"],
             identifier="trackers",
         )
 

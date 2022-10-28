@@ -1,8 +1,8 @@
 import logging
 import sys
 
-from sonarrAnnounced.trackers import Trackers
-from sonarrAnnounced.irc import IRCClient, cfg
+from sonarr_announced.trackers import Trackers
+from sonarr_announced.irc import IRCClient, cfg
 
 
 tl = Trackers().get_tracker("torrentleech")

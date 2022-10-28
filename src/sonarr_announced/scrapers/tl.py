@@ -3,7 +3,7 @@ import re
 import requests
 import sys
 
-from sonarrAnnounced import config
+from sonarr_announced import config
 
 cfg = config.init()
 logger = logging.getLogger(__name__)
