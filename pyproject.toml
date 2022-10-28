@@ -1,13 +1,9 @@
-[build-system]
-requires = ["setuptools", "wheel"]
-build-backend = "setuptools.build_meta"
-
 [tool.pytest.ini_options]
 pythonpath = [
-    "."
+    "./src"
 ]
 [tool.poetry]
-name = "sonarrannounced"
+name = "sonarr-announced"
 version = "0.1.0"
 description = "Fork of I3uddz/sonarrAnnounced for personal usage"
 authors = ["Gravity Black <gravityblack@mailbox.org>"]
@@ -38,5 +34,5 @@ selenium = "^4.5.0"
 nest_asyncio = "^1.5.6"
 
 [build-system]
-requires = ["poetry-core"]
+requires = ["poetry-core>=1.0.0"]
 build-backend = "poetry.core.masonry.api"
