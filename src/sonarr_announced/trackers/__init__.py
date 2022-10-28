@@ -1,7 +1,5 @@
 import logging
-import sys
 
-print(sys.path)
 from pluginbase import PluginBase
 
 from sonarr_announced.config import cfg
