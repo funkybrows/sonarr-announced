@@ -35,3 +35,6 @@ htmlcov/*
 
 # Tracker repository
 autodl-trackers
+
+# env files
+*.env

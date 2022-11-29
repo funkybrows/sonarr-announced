@@ -1,0 +1,7 @@
+version: "3"
+services:
+  arrnounced:
+    image: ${DOCKER_REGISTRY}/${PROJECT_NAME}/${NAMESPACE}:${DOCKER_TAG_VERSION}
+    container_name: "${PROJECT_NAME}-${NAMESPACE}"
+    volumes:
+      - "${DOCKER_APP_SOURCE_FROM_COMPOSE}:${DOCKER_APP_DEST}"
