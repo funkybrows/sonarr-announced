@@ -8,7 +8,14 @@ from time import time
 
 import nest_asyncio
 import pytest
+from sonarr_announced.sonarr import get_sonarr_client
 from sonarr_announced.trackers import Trackers
+from sonarr_announced.trackers.tl import (
+    BASE_DOWNLOAD_URL as BASE_DOWNLOAD_TL_URL,
+    get_name_url_from_msg as get_name_url_from_tl_msg,
+    get_torrent_id_from_url as get_torrent_id_from_tl_url,
+    get_dl_link as get_tl_dl_link,
+)
 from sonarr_announced.irc import IRCClient, cfg
 from test import get_tl_client
 
@@ -18,12 +25,42 @@ handler = logging.StreamHandler(sys.stdout)
 handler.setLevel(logging.DEBUG)
 logger.addHandler(handler)
 
+sonarr_client = get_sonarr_client()
 
 Path("./tests/testOutput").mkdir(parents=True, exist_ok=True)
 
 
 def get_tl():
     return Trackers().get_tracker("torrentleech")
+
+
+def test_get_name_from_msg():
+    msg = "\x02\x0300,04New Torrent Announcement:\x02\x0300,12 <TV :: Episodes HD>  Name:'Handmade Britains Best Woodworker S02E06 1080p HDTV H264-DARKFLiX' uploaded by 'Anonymous' - \x0301,15 https://www.torrentleech.org/torrent/240921997"
+    name, _ = get_name_url_from_tl_msg(msg)
+    assert name == "Handmade Britains Best Woodworker S02E06 1080p HDTV H264-DARKFLiX"
+
+
+def test_get_url_from_msg():
+    msg = "\x02\x0300,04New Torrent Announcement:\x02\x0300,12 <TV :: Episodes HD>  Name:'Handmade Britains Best Woodworker S02E06 1080p HDTV H264-DARKFLiX' uploaded by 'Anonymous' - \x0301,15 https://www.torrentleech.org/torrent/240921997"
+    _, url = get_name_url_from_tl_msg(msg)
+    assert url == "https://www.torrentleech.org/torrent/240921997"
+
+
+def test_get_torrent_id_from_url():
+    assert (
+        get_torrent_id_from_tl_url("https://www.torrentleech.org/torrent/240921997")
+        == "240921997"
+    )
+
+
+def test_get_dl_link():
+    msg = "\x02\x0300,04New Torrent Announcement:\x02\x0300,12 <TV :: Episodes HD>  Name:'Handmade Britains Best Woodworker S02E06 1080p HDTV H264-DARKFLiX' uploaded by 'Anonymous' - \x0301,15 https://www.torrentleech.org/torrent/240921997"
+    name, url = get_name_url_from_tl_msg(msg)
+    torrent_id = get_torrent_id_from_tl_url(url)
+    assert (
+        get_tl_dl_link(name, torrent_id)
+        == f"{BASE_DOWNLOAD_TL_URL}/{torrent_id}/{'.'.join(name.split(' '))}.torrent"
+    )
 
 
 @pytest.mark.asyncio
