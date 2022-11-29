@@ -1,0 +1,8 @@
+[backends.sonarr]
+type = "sonarr"
+apikey = "sonapi"
+
+[trackers.tracker1]
+irc_nickname = "t1nick"
+irc_server = "t1url"
+irc_channels = "t1ch"

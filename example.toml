@@ -1,0 +1,128 @@
+# This is an example configuration for Arrnounced.
+# Unless specified, sections and fields are optional.
+# Optional sections and fields may be omitted and default values will be used instead.
+# The default values are specified in this file unless otherwise specified.
+# Mandatory field are marked and specified with example values.
+
+# Configuration for Arrnounced web server
+[webui]
+host = "0.0.0.0"
+port = 3467
+# Username and password are default empty which means login is disabled
+username = "admin"
+password = "password"
+
+# Database configuration
+[database]
+# Purge releases in the database which are older the given number of days
+# Disable purging: 0
+purge_days = 365
+
+# Logging configuration
+[log]
+to_file = true
+to_console = true
+
+# Sonarr, Radarr and Lidarr are referred to as backends.
+# At least one backend is required. Choose any name for the backend [backends.<name>].
+# Which type of backend is decided by the "type" field.
+# Allowed types are radarr, sonarr, lidarr.
+# API Key can be found in Settings -> General in Sonarr/Radarr/Lidarr
+[backends.Radarr4k]
+url = "http://localhost:7878"
+# Mandatory
+type = "radarr"
+apikey = "YOUR-API-KEY"
+
+[backends.example_backend]
+url = "http://localhost:8989"
+# Mandatory
+type = "sonarr"
+apikey = "YOUR-API-KEY"
+
+[backends.MyLidarr]
+url = "http://localhost:8686"
+# Mandatory
+type = "lidarr"
+apikey = "YOUR-API-KEY"
+
+
+# One or more trackers shall be configured. The section name shall be the
+# "type" as specified in the XML tracker configuration. The type shall be put
+# in subsection "trackers" i.e. [trackers.<type>]. Any type with a period (.)
+# must be quoted e.g. [trackers."tvt.ro"]
+[trackers.x264]
+# Mandatory
+irc_nickname = "arrnounced_bot"
+irc_server = "example.com"
+irc_port = 6667
+
+# IRC channels to join. If irc_invite_cmd is set the channels will not be
+# joined until an invite to a channel is received.
+# Mandatory
+irc_channels = "#x264, #example_channel"
+
+# Password for registration with IRC NICKSERV.
+# Default empty
+irc_ident_password = "password"
+
+# Connect to IRC using TLS (Transport Layer Security)
+irc_tls = false
+# Verify TLS certificate. False means connect even if not valid.
+irc_tls_verify = false
+
+# Fields "irc_inviter" and "irc_invite_cmd" must be used together.
+# "irc_inviter" is the nickname the IRC channel invite request is sent to.
+# "irc_invite_cmd" is whatever you send to "irc_inviter" to request an invite.
+# Default empty
+irc_inviter = "x2bot"
+irc_invite_cmd = "invite_me #x264"
+
+# Whether to use HTTPS when downloading torrent file
+torrent_https = false
+
+# Delay in seconds between when an IRC announcement is received and
+# the backends are notified of the release.
+announce_delay = 0
+
+# List of backend names to always notify of an announcement from this tracker
+# Default empty
+notify_backends = "example_backend, MyLidarr"
+
+# Some trackers have a category in the annoucement. This section may be used to
+# specify which backend shall be notified of the announcement based on the category.
+# Default empty
+[trackers.x264.category]
+# Set the value for each of your backend names.
+# The value is case insensitive regular expression.
+Radarr4k = "movie|film|motion picture"
+# example_backend and MyLidarr may be not specified as they are set in "notify_backends"
+#example_backend =
+#MyLidarr =
+
+# N.B: If none of notify_backends or category are specified all configured backends
+# will be notified.
+# Notifications will stop after a backend approved an announcement.
+
+# Settings from the XML tracker configuration, x264.tracker, are set in this
+# section. All settings must be specified here (description excluded).
+[trackers.x264.settings]
+passkey = "mypasskey"
+
+
+# A second example tracker. This time slimmed down
+[trackers.nbl]
+irc_nickname = "arrnounced_bot"
+irc_server = "example.com"
+irc_port = 6697
+irc_channels = "#example_channel2"
+
+irc_ident_password = "password"
+
+# Only notify Sonarr of all announcements.
+notify_backends = "example_backend"
+
+# Tracker XML config settings. (Remove "gazelle_" and "cookie_")
+[trackers.nbl.settings]
+authkey = "my_auth_key"
+torrent_pass = "my_torrent_pass"
