@@ -4,6 +4,7 @@ import requests
 import sys
 
 from sonarr_announced import config
+from sonarr_announced.trackers.tl import get_dl_link
 
 cfg = config.init()
 logger = logging.getLogger(__name__)
@@ -27,14 +28,8 @@ def login():
     return session
 
 
-def get_torrent_from_url(url):
-    domain = re.search(r"http[s]?://www.torrentleech.[\w]+", url).group(0)
+def get_torrent_data(name, torrent_id):
     session = login()
-    r = session.get(url)
-    logger.debug("URL: %s", url)
-    torrent_info_match = re.search(r'href=("/[\S]+")>Download[\s]+Torrent', r.text)
-    relative_torrent_url = re.sub(r'href="', "", torrent_info_match.group(0)).split(
-        '"'
-    )[0]
-    r = session.get(f"{domain}{relative_torrent_url}")
+    r = session.get(link := get_dl_link(name, torrent_id))
+    logger.debug("URL: %s", link)
     return r.content

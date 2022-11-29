@@ -8,6 +8,7 @@ import pydle.client
 from sonarr_announced import config
 from sonarr_announced import deluge
 from sonarr_announced import sonarr
+from sonarr_announced.trackers.tl import get_name_url_from_msg, get_torrent_id_from_url
 
 logger = logging.getLogger(__name__)
 # logger = logging.getLogger("IRC")
@@ -71,14 +72,18 @@ class IRCClient(
             logger.debug("%s sent us a message: %s", target, message)
         else:
             logger.debug("Message: %s, type: %s", [message], type(message))
-            parsed_title, url = sonarr_client.get_parsed_tl_announcement(message)
-            if parsed_title:
+            name, url = get_name_url_from_msg(message)
+            parsed_title = sonarr_client.get_parsed_title_from_sonarr(name)
+            if (
+                parsed_title
+            ):  # None if error in get_name_torrent_id or invalid title in original message
                 push_release_response = sonarr_client.push_torrent_release(
                     parsed_title, url
                 )
                 try:
                     if push_release_response["approved"]:
-                        deluge_client.add_torrent_from_url(parsed_title, url)
+                        # deluge_client.add_torrent(name, get_torrent_id_from_url(url))
+                        pass
                     else:
                         logger.debug(
                             "Title: %s with url: %s not approved, %s",

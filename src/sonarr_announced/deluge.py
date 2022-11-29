@@ -2,7 +2,7 @@ from base64 import b64encode
 import stringcase
 from deluge_client import DelugeRPCClient
 
-from sonarr_announced.scrapers.tl import get_torrent_from_url
+from sonarr_announced.scrapers.tl import get_torrent_data
 import logging
 
 logger = logging.getLogger("Deluge")
@@ -20,12 +20,12 @@ class DelugeTlRpcClient(DelugeRPCClient):
             except Exception:
                 logger.exception("Failed to connect to deluge client")
 
-    def add_torrent_from_url(self, title, url):
+    def add_torrent(self, name, torrent_id):
         self.connect_if_necessary()
-        torrent_data = get_torrent_from_url(url)
+        torrent_data = get_torrent_data(name, torrent_id)
         result = self.call(
             "core.add_torrent_file",
-            stringcase.snakecase(title),
+            stringcase.snakecase(name),
             b64encode(torrent_data),
             {},
         )
