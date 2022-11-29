@@ -1,5 +1,6 @@
 import datetime
 import logging
+import re
 
 from sonarr_announced import config, db, sonarr, utils
 
@@ -17,6 +18,7 @@ irc_channel = "#tlannounces"
 irc_tls = False
 # irc_tls_verify = True
 irc_tls_verify = False
+BASE_DOWNLOAD_URL = "https://www.torrentleech.org/download"
 
 # these are loaded by init
 cookies = None
@@ -82,6 +84,36 @@ def get_torrent_link(torrent_id, torrent_name):
         utils.replace_spaces(torrent_name, "."),
     )
     return download_link
+
+
+URL_PATTERN = r"http[s]?://(www.)?\w+.\w+/torrent/(\d+)"
+
+
+def get_dl_link(original_name, torrent_id):
+    # XXX: Add mirrors
+    return (
+        f"{BASE_DOWNLOAD_URL}/{torrent_id}/{'.'.join(original_name.split(' '))}.torrent"
+    )
+
+
+def get_name_url_from_msg(msg):
+    # cat_pattern = r"<\w+(\s+)?(:+)?(\s+)[\w\s]+>"
+    # cat_match = re.search(cat_pattern, msg)
+    # cat = msg[cat_match.start(0) : cat_match.end(0)]
+
+    if not (
+        name_match := re.search(r"Name:\'(.)+?\'", msg)
+    ):  # Announcebot may have changed
+        logger.error("%s is not a valid TL announcement", msg)
+        return None, None
+
+    name_w_prefix = msg[name_match.start(0) : name_match.end(0)]
+    url_match = re.search(URL_PATTERN, msg)
+    return (name_w_prefix[6:-1], url_match.group(0))  # Remove Name: and trailing quote
+
+
+def get_torrent_id_from_url(url):
+    return re.search(URL_PATTERN, url).group(2)
 
 
 # Generate real download link
