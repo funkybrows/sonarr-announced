@@ -46,7 +46,7 @@ def _get_trackers(user_config, tracker_config_path):
             trackers[user_tracker.type] = Tracker(
                 TrackerConfig(user_tracker, xml_configs[user_tracker.type])
             )
-            _set_latest(trackers[user_tracker.type])
+            # _set_latest(trackers[user_tracker.type])
     return trackers
 
 
