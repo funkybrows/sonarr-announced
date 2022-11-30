@@ -4,7 +4,7 @@ import signal
 import sys
 import threading
 
-from arrnounced import backend, db, irc, webui
+from arrnounced import backend, db, irc
 
 from arrnounced.eventloop_utils import eventloop_util
 from arrnounced.tracker import register_observer, Tracker, TrackerConfig
