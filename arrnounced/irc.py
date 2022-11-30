@@ -81,7 +81,9 @@ class IRC(irc_modes.ModesFixer):
         await self.attempt_join_channel()
 
     async def on_message(self, target, source, message):
-        await message_handler.on_message(self.tracker, source, target.lower(), message)
+        return await message_handler.on_message(
+            self.tracker, source, target.lower(), message
+        )
 
     async def on_invite(self, channel, by):
         logger.info("%s invited us to join %s", by, channel)

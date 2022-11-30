@@ -65,6 +65,7 @@ async def _handle_announcement(tracker, announcement):
     #         db.insert_snatched(db_announced, announcement.snatch_date, backend.name)
 
     tracker.status.latest_announcement = announcement
+    return announcement
 
 
 async def on_message(tracker, source, target, message):
@@ -74,6 +75,6 @@ async def on_message(tracker, source, target, message):
         return
 
     try:
-        await _handle_announcement(tracker, announcement)
+        return await _handle_announcement(tracker, announcement)
     except TransactionError:
         logger.exception("Database transaction failed for %s", announcement.title)
