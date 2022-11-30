@@ -5,3 +5,6 @@ services:
     container_name: "${PROJECT_NAME}-${NAMESPACE}"
     volumes:
       - "${DOCKER_APP_SOURCE_FROM_COMPOSE}:${DOCKER_APP_DEST}"
+      - "${DOCKER_APP_SOURCE_FROM_COMPOSE}/autodl-trackers/:/autodl-trackers/"
+      - "${DOCKER_APP_SOURCE_FROM_COMPOSE}/config.toml:/config.toml"
+      - "${DOCKER_APP_SOURCE_FROM_COMPOSE}/logs/:/logs"
