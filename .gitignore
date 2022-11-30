@@ -38,3 +38,6 @@ autodl-trackers
 
 # env files
 *.env
+
+# personal toml
+config.toml
