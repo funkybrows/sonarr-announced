@@ -82,12 +82,12 @@ async def _handle_announcement(tracker, announcement):
 
 
 async def on_message(tracker, source, target, message):
-    logger.info("GOT A MESSAGE %s, source: %s, target: %s", [message], source, target)
     announcement = _check_and_parse(tracker, source, target, message)
     if announcement is None:
         return
 
     try:
-        return await _handle_announcement(tracker, announcement)
+        await _handle_announcement(tracker, announcement)
     except TransactionError:
         logger.exception("Database transaction failed for %s", announcement.title)
+    return
