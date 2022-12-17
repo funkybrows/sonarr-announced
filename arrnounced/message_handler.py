@@ -79,7 +79,6 @@ async def _handle_announcement(tracker, announcement):
     #         db.insert_snatched(db_announced, announcement.snatch_date, backend.name)
 
     tracker.status.latest_announcement = announcement
-    return announcement
 
 
 async def on_message(tracker, source, target, message):
