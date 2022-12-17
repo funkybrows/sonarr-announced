@@ -11,7 +11,11 @@ logger = logging.getLogger("BACKEND")
 
 def _extract_approval(json_response, backend_name):
     try:
-        return json_response["approved"]
+        approved = json_response["approved"]
+        if not approved:
+            logger.debug("Rejected: %s", json_response)
+        return approved
+
     except TypeError:
         logger.warning("No valid JSON reply from %s", backend_name, exc_info=True)
     except KeyError:
