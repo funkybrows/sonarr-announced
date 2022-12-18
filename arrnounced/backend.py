@@ -35,7 +35,7 @@ class Backend:
     def _create_json(self, announcement):
         params = {
             "title": announcement.title,
-            # "downloadUrl": announcement.torrent_url,
+            "downloadUrl": "https://dummyurl.com",
             "protocol": "Torrent",
             "publishDate": announcement.date.isoformat(),
         }
