@@ -17,16 +17,18 @@ class AioClient(AioPikaClient):
         pool=None,
     ):
         super().__init__(exchange=None, client_name=client_name, pool=pool)
-        self._exchange_name = exchange_name
+        self.declare_exchange_name = (
+            exchange_name  # not to be confused w/ AioPikaClient._exchange_name
+        )
 
     async def connect(self):
         await super().connect()
         await self.wait_until_connected(timeout=self.TIMEOUT)
         exchange = await self.declare_exchange(
-            self._exchange_name,
+            self.declare_exchange_name,
             exchange_type="topic",
             durable=True,
             timeout=self.TIMEOUT,
         )
         if exchange:
-            await self.set_exchangE(self._exchange_name)
+            await self.set_exchange(self.declare_exchange_name)
