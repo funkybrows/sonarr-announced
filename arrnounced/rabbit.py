@@ -32,3 +32,22 @@ class AioClient(AioPikaClient):
         )
         if exchange:
             await self.set_exchange(self.declare_exchange_name)
+
+    @staticmethod
+    def convert_to_message(announcement):
+        return {
+            "name": announcement.title,
+            "torrent_url": announcement.torrent_url,
+            "date": announcement.date.isoformat(),
+            "indexer": announcement.indexer,
+        }
+
+    async def publish_from_announcement(self, announcement):
+        return await self.publish_message(self.convert_to_message(announcement))
+
+    async def publish_message(self, message):
+        return await super().publish_message(
+            f"torrent.download.url.{message['indexer'].lower()}",
+            message,
+            content_type="application/json",
+        )
