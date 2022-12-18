@@ -12,7 +12,7 @@ class AioClient(AioPikaClient):
 
     def __init__(
         self,
-        exchange_name=f"{os.environ.get('PROJECT_NAME')}-{os.environ.get('NAMESPACE')}",
+        exchange_name=os.environ.get("RABBIT_EXCHANGE"),
         client_name=None,
         pool=None,
     ):
