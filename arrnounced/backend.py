@@ -11,6 +11,8 @@ logger = logging.getLogger("BACKEND")
 
 def _extract_approval(json_response, backend_name):
     try:
+        if isinstance(json_response, list):
+            json_response = json_response[0]  # sonarr v3
         approved = json_response["approved"]
         if not approved:
             logger.debug("Rejected: %s", json_response)
@@ -77,7 +79,7 @@ class UseIndexer(Backend):
 
 # TODO: Use v3 API
 class Sonarr(UseIndexer):
-    push_path = "/api/release/push"
+    push_path = "/api/v3/release/push"
     diskspace_path = "/api/diskspace"
 
 
