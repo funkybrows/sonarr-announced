@@ -40,8 +40,7 @@ class SessionProvider:
     async def get(url, headers):
         try:
             async with SessionProvider.get_session().get(
-                url,
-                headers=headers,
+                url, headers=headers
             ) as http_response:
                 return await http_response.json()
         except Exception as e:
