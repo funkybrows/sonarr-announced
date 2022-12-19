@@ -11,8 +11,9 @@
 __pycache__/
 *.py[cod]
 *$py.class
+dist/
 
-# Covers sonarrAnnounced sensitive info
+# Covers Announced sensitive info
 # torrents
 *.torrent
 # logs
@@ -27,5 +28,16 @@ __pycache__/
 # generators
 *.bat
 
-# Test data files
-tests/testOutput/
+# Coverage data and report
+.coverage
+coverage/*
+htmlcov/*
+
+# Tracker repository
+autodl-trackers
+
+# env files
+*.env
+
+# personal toml
+config.toml

@@ -1,64 +1,90 @@
-# sonarrAnnounced
+# Arrnounced
+Notify Sonarr/Radarr/Lidarr of tracker IRC announcements.
 
-Python script to notify sonarr of tracker announcements from IRC announce channels. 
+Built on the work of
+[sonarrAnnounced](https://github.com/l3uddz/sonarrAnnounced) with tracker
+configuration from
+[autodl-trackers](https://github.com/autodl-community/autodl-trackers) (used by
+[autodl-irssi](https://github.com/autodl-community/autodl-irssi))
 
-# Announcement
+## Features
+* All trackers from
+[autodl-trackers](https://github.com/autodl-community/autodl-trackers/tree/master/trackers)
+are supported.
+* Web UI to list announcements and accepted notifications
+    * Ability to search among the announcements remains to be implemented though
+* Notify based on announcement category
+* Configurable delay between IRC announcement and notification
 
-This project is no longer being maintained.
+Only a few of the supported trackers are tested at the moment. Please report any issues you find.
 
-You can use the rewritten version in Golang with support for all trackers that autodl supports:
+## Screenshots
 
-https://gitlab.com/cloudb0x/trackarr
+### Main page
+![Index Page](https://raw.githubusercontent.com/weannounce/arrnounced/img/doc/index.PNG)
+### Status page
+![Status Page](https://raw.githubusercontent.com/weannounce/arrnounced/img/doc/status.gif)
+
+# Setup
+
+_Release v0.7 updated the configuration format. See the [release
+notes](https://github.com/weannounce/arrnounced/releases/tag/v0.7) for more
+information._
+
+## Configuration
+The default configuration path is `~/.arrnounced/settings.toml`.
+[example.cfg](https://github.com/weannounce/arrnounced/blob/master/example.cfg)
+is the acting configuration documentation.
+
+The default XML tracker configuration path is `~/.arrnounced/autodl-trackers/trackers`
+
+## Installation
+
+```bash
+# Optional virtual environment
+$ python -m venv path/to/venv
+$ source path/to/venv/bin/activate
+
+# Install
+$ pip install arrnounced
+
+# Run
+$ arrnounced
+```
+
+Configuration files path as well as log and database location may be changed with command line arguments.
 
 
-## Requirements
-1. Python 3.5.2 or newer
-2. requirements.txt modules
+### Docker
+[Arrnounced on dockerhub](https://hub.docker.com/r/weannounce/arrnounced)
 
-## Supported Trackers
-1. BTN
-2. MTV
-3. IPTorrents
-4. Nebulance
-5. HD-Torrents
-6. XSpeeds
-7. FileList
+* You must provide `settings.toml` in `/config`. This is also where logs and the database will be stored.
+* To access the web UI using bridged network the webui host in settings.toml must be `0.0.0.0`.
+* As Arrnounced runs as a non-root user by default it is recommended to specify your own user to handle write access to `/config`.
 
-Open to suggestions/pull requests!
+```bash
+# Default example
+docker run -v /path/to/settings:/config \
+           --user 1000 \
+           -p 3467:3467 weannounce/arrnounced:latest
+```
 
-## To-Do
+The docker image comes with a snapshot of XML tracker configurations located under `/trackers`. If you prefer your own version you can mount over it.
 
+```bash
+# Example with custom XML tracker configs and verbose logging
+docker run -v /path/to/settings:/config \
+           -v /path/to/autodl-trackers/trackers:/trackers \
+           -e VERBOSE=Y \
+           --user 1000 \
+           -p 3467:3467 weannounce/arrnounced:latest
+```
 
-## Feature Requests
-Request features at [FeatHub](http://feathub.com/l3uddz/sonarrAnnounced)
+## Database design update
+The database design was updated in [v0.3](https://github.com/weannounce/arrnounced/releases/tag/v0.3)
+([ef931ee](https://github.com/weannounce/arrnounced/commit/ef931eef27348f82254d601f96d094a7b9f147bb)).
+If you used Arrnounced prior to this or used its predecessor you have two options.
+* Convert your old database using [convert_db.py](https://github.com/weannounce/arrnounced/blob/master/convert_db.py)
+* Move the old database file for safe keeping and let Arrnounced create a new file.
 
-
-# Installation (on Debian Jessie)
-## Python 3.5.2
-
-1. `wget https://www.python.org/ftp/python/3.5.2/Python-3.5.2.tar.xz`
-2. `tar xvf Python-3.5.2.tar.xz`
-3. `cd Python-3.5.2`
-4. `sudo apt-get install make git build-essential libssl-dev zlib1g-dev libbz2-dev libsqlite3-dev`
-5. `sudo ./configure --enable-loadable-sqlite-extensions && sudo make && sudo make install`
-
-This should automatically install pip3.5 for you
-
-## sonarrAnnounced
-1. `cd /opt`
-2. `sudo git clone https://github.com/l3uddz/sonarrAnnounced`
-3. `sudo chown -R user:group sonarrAnnounced`
-4. `sudo pip3.5 install -r /opt/sonarrAnnounced/requirements.txt`
-5. `mv settings.cfg.default settings.cfg`
-6. `nano settings.cfg`
-- Configure it how you want
-7. Edit systemd/announced.service with your user and group
-8. `sudo cp announced.service /etc/systemd/system/announced.service`
-9. `sudo systemctl daemon-reload`
-10. `sudo systemctl start announced`
-- Check it is working properly, http://localhost:PORT - use user/pass you chosen in the [server] section of settings.cfg
-11. if you want auto start @ boot, `sudo systemctl enable announced`
-
-# Installation videos
-1. Debian Jessie: https://youtu.be/oLiGMcUWiB0
-2. Windows: https://youtu.be/UbHwFqkLc0c
+The default path to the database is `~/.arrnounced/brain.db`

@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html>
+  <script>
+    var announcement_pages = {{ announcement_pages }};
+    var snatch_pages = {{ snatch_pages }};
+  </script>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Arrnounced</title>
+    <link rel="stylesheet" href="assets/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:400italic,700italic,400,700">
+    <link rel="stylesheet" href="assets/css/user.css">
+    <link rel="stylesheet" href="assets/css/index.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.5.2/animate.min.css">
+    <link rel="stylesheet" href="assets/css/toastr.css">
+</head>
+
+<body>
+<nav class="navbar navbar-default" style="margin-bottom:0.5cm;">
+    <div class="container-fluid">
+        <div class="navbar-header"><a class="navbar-brand navbar-link" href="/"><i
+                class="glyphicon glyphicon-transfer"></i>Arrnounced</a>
+            <button class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navcol-1"><span
+                    class="sr-only">Toggle navigation</span><span class="icon-bar"></span><span class="icon-bar"></span><span
+                    class="icon-bar"></span></button>
+        </div>
+        <div class="collapse navbar-collapse" id="navcol-1">
+            <ul class="nav navbar-nav navbar-right">
+                <li class="presentation" role="presentation"><a href="/status">Status </a></li>
+                <li role="presentation"><a href="/logs">Logs </a></li>
+                {% if login_required %}
+                <li role="presentation"><a href="/logout">Logout </a></li>
+                {% endif %}
+            </ul>
+        </div>
+    </div>
+</nav>
+<div>
+    <div class="container-fluid" style="padding-left:25px;padding-right:25px;">
+        <div class="row">
+            <div class="col-md-6 col-md-offset-0">
+                <div class="table-responsive" id="snatched_torrents">
+                    <table class="table table-bordered table-condensed">
+                        <thead>
+                        <tr>
+                            <th class="col-xs-2">When</th>
+                            <th class="col-xs-2">Indexer</th>
+                            <th class="col-xs-8">Title</th>
+                            <th class="col-xs-2">Backend</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        </tbody>
+                        <caption class="text-center text-success bg-success">Snatched Torrents</caption>
+                    </table>
+                </div>
+                <div class="col page_div">
+                    <ul id="snatched-pagination" class="pagination-sm"></ul>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="table-responsive" id="announced_torrents">
+                    <table class="table table-bordered table-condensed">
+                        <thead>
+                        <tr>
+                            <th class="col-xs-2">When</th>
+                            <th class="col-xs-2">Indexer</th>
+                            <th class="col-xs-8">Title</th>
+                            <th class="col-xs-2">Backend</th>
+                            <th class="col-xs-1">Actions</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        </tbody>
+                        <caption class="text-center text-primary bg-info">Announced Releases</caption>
+                    </table>
+                </div>
+                <div class="col page_div">
+                    <ul id="announced-pagination" class="pagination-sm"></ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div style="display: none" class="dropdown" id="action_div">
+  <a href="#" data-toggle="dropdown">
+    <i class="glyphicon glyphicon-transfer" style="color:#3399f3"
+       data-bs-hover-animate="swing"
+       title="Notify backend">
+    </i>
+  </a>
+  <ul class="dropdown-menu dropdown-menu-right">
+    <li class="dropdown-header">Notify backend</li>
+  </ul>
+  <a style="margin-left:2.5mm;" id="torrent_url">
+    <i class="glyphicon glyphicon-download-alt" data-bs-hover-animate="tada" title="Download torrent">
+    </i>
+  </a>
+</div>
+<script src="assets/js/jquery.min.js"></script>
+<script src="assets/js/jquery.twbsPagination.min.js"></script>
+<script src="assets/bootstrap/js/bootstrap.min.js"></script>
+<script src="assets/js/common.js"></script>
+<script src="assets/js/index.js"></script>
+<script src="assets/js/logs.js"></script>
+<script src="assets/js/settings.js"></script>
+<script src="assets/js/toastr.js"></script>
+</body>
+
+</html>

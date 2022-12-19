@@ -1,0 +1,33 @@
+table {
+  table-layout:fixed;
+}
+
+tr td {
+  overflow:hidden;
+  white-space:nowrap;
+  text-overflow:ellipsis;
+}
+
+.action_td {
+  overflow:visible;
+}
+
+.dropdown-menu {
+  position:absolute;
+}
+
+#announced_torrents {
+  overflow:visible;
+}
+
+#snatched-pagination {
+  margin: 0 auto;
+}
+
+#announced-pagination {
+  margin: 0 auto;
+}
+
+.page_div {
+  text-align: center
+}
