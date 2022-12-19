@@ -69,11 +69,17 @@ async def test_rabbit(
         await consumer.start_consuming(queue_name, callback)
 
     async def get_announcement(message):
-        tl_tracker = _get_trackers(user_config, "/autodl-trackers/trackers")["tl"]
-        tl_irc = IRC(tl_tracker, pydle_pool)
-        await tl_irc.on_message("#tlannounces", "_AnnounceBot_", message)
-        assert mock_announce.called
-        return mock_announce.call_args[0][0]
+        with mock.patch(
+            "arrnounced.message_handler.get_rabbit_client"
+        ) as mock_get_rabbit:
+            mock_get_rabbit.return_value = (rabbit_mock := mock.AsyncMock())
+            rabbit_mock.wait_until_ready.return_value = asyncio.Future()
+
+            tl_tracker = _get_trackers(user_config, "/autodl-trackers/trackers")["tl"]
+            tl_irc = IRC(tl_tracker, pydle_pool)
+            await tl_irc.on_message("#tlannounces", "_AnnounceBot_", message)
+            assert mock_announce.called
+            return mock_announce.call_args[0][0]
 
     pool = AioConnectionPool(3)
     try:
