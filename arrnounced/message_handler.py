@@ -4,10 +4,10 @@ import logging
 from pony.orm.core import TransactionError
 
 from arrnounced import announce_parser
-from arrnounced import db
 from arrnounced import utils
 from arrnounced.announcement import create_announcement
 from arrnounced.backend import notify, notify_which_backends
+from arrnounced.rabbit import get_rabbit_client
 
 logger = logging.getLogger("MESSAGE_HANDLER")
 
