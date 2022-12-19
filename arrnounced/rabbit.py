@@ -28,7 +28,7 @@ class AioClient(AioPikaClient):
     def __init__(
         self,
         exchange_name=os.environ.get("RABBIT_EXCHANGE"),
-        client_name=None,
+        client_name=f"{os.environ.get('PROJECT_NAME')}-{os.environ.get('NAMESPACE')}-arrnounced-AioClient",
         pool=None,
     ):
         super().__init__(exchange=None, client_name=client_name, pool=pool)
