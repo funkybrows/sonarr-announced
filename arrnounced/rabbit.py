@@ -6,6 +6,21 @@ from aio_pika_wrapper.client import AioClient as AioPikaClient
 
 logger = logging.getLogger("arrnounced.rpc")
 
+RABBIT_CLIENT = None
+
+
+def get_rabbit_client(exchange_name=None, client_name=None):
+    global RABBIT_CLIENT
+    if not RABBIT_CLIENT:
+        kwargs = {}
+        if exchange_name:
+            kwargs["exchange_name"] = exchange_name
+        if client_name:
+            kwargs["client_name"] = client_name
+        RABBIT_CLIENT = AioClient(**kwargs)
+
+    return RABBIT_CLIENT
+
 
 class AioClient(AioPikaClient):
     TIMEOUT = 5
@@ -42,10 +57,19 @@ class AioClient(AioPikaClient):
             "indexer": announcement.indexer,
         }
 
-    async def publish_from_announcement(self, announcement):
-        return await self.publish_message(self.convert_to_message(announcement))
+    async def publish_from_announcement(self, announcement, add_in_paused_state=False):
+        return await self.publish_message(
+            self.convert_to_message(announcement),
+            add_in_paused_state=add_in_paused_state,
+        )
 
-    async def publish_message(self, message):
+    async def publish_message(self, message, add_in_paused_state=False):
+        download_options = {}
+        if add_in_paused_state:
+            download_options["add_in_paused_state"] = True
+        if download_options:
+            message["download_options"] = download_options
+
         return await super().publish_message(
             f"torrent.download.url.{message['indexer'].lower()}",
             message,
