@@ -4,7 +4,7 @@ version = "0.0.1"
 description = "Notify deluge of Sonarr/Radarr/Lidarr approved IRC announcements. Fork of I3uddz/sonarrAnnounced and WeAnnounce/arrnounced"
 authors = ["Gravity Black <gravityblack@mailbox.org>"]
 readme = "README.md"
-packages = [{include = "arrnounced"}]
+packages = [{include = "arrnounced", from = "src"}]
 
 [tool.poetry.scripts]
 arrnounced = 'arrnounced.cli:main'
