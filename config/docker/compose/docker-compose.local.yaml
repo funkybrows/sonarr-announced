@@ -1,0 +1,39 @@
+version: "3"
+services:
+  arrnounced:
+    image: ${DOCKER_REGISTRY}/${PROJECT_NAME}/${NAMESPACE}:${DOCKER_TAG_VERSION}
+    container_name: "${PROJECT_NAME}-${NAMESPACE}"
+    environment:
+      RABBITMQ_USER: ${RABBITMQ_USER}
+      RABBITMQ_PASS: ${RABBITMQ_PASS}
+      RABBITMQ_HOST: ${RABBITMQ_HOST}
+      RABBITMQ_PORT: ${AMQP_PORT}
+      RABBIT_EXCHANGE: ${RABBIT_EXCHANGE}
+
+    volumes:
+      - "${DOCKER_APP_SOURCE_FROM_COMPOSE}:${DOCKER_APP_DEST}"
+      - "${DOCKER_USER_CONFIG_PATH_FROM_COMPOSE}/autodl-trackers/:/root/.arrnounced/autodl-trackers/"
+      - "./${DOCKER_USER_CONFIG_PATH_FROM_COMPOSE}/config.toml:/root/.arrnounced/config/config.toml"
+      - "./logs/:/root/.${PROJECT_NAME}/logs"
+    depends_on:
+      arrnounced-rabbitmq:
+        condition: service_healthy
+    restart: unless-stopped
+
+  arrnounced-rabbitmq:
+    image: rabbitmq:3.11
+    hostname: ${PROJECT_NAME}-rabbitmq-${NAMESPACE}
+    container_name: ${PROJECT_NAME}-rabbitmq-${NAMESPACE}
+    command: rabbitmq-server
+    environment:
+      RABBITMQ_DEFAULT_USER: ${RABBITMQ_USER}
+      RABBITMQ_DEFAULT_PASS: ${RABBITMQ_PASS}
+    ports:
+      - ${AMQP_PORT}:5672
+      - "${PROMETHEUS_PORT}:15672"
+    healthcheck:
+      test: [ "CMD", "rabbitmqctl", "status" ]
+      interval: 10s
+      timeout: 10s
+      retries: 5
+    restart: unless-stopped

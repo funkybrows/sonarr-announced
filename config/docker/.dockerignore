@@ -1,0 +1,8 @@
+**/__pycache__
+*ignore
+*.env
+
+README.md
+**/config/docker
+!**/config/docker/scripts/*entrypoint.sh
+.git
