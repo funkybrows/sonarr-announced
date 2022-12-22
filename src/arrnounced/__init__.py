@@ -15,9 +15,12 @@ from arrnounced import utils
 log_file_path = path.join(
     Path(__file__).parent.parent.parent.absolute(), "config", "logging.conf"
 )
+print(log_file_path)
 logging.config.fileConfig(
     log_file_path,
     defaults={
-        "log_file_path": os.environ.get("LOG_FOLDER_PATH", utils.get_log_folder_path())
+        "log_folder_path": os.environ.get(
+            "LOG_FOLDER_PATH", utils.get_log_folder_path()
+        )
     },
 )
