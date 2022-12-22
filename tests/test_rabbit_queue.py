@@ -38,6 +38,7 @@ async def test_rabbit(
     mock_notify,
     mock_announce,
     user_config,
+    tracker_folder_path,
     pydle_pool,
 ):
     message = "\x02\x0300,04New Torrent Announcement:\x02\x0300,12 <Movies :: BlurayRip>  Name:'Some Fake 2020 BDRip x264-Elite' uploaded by 'Anonymous' - \x0301,15 https://www.torrentleech.org/torrent/123456789"
@@ -74,8 +75,9 @@ async def test_rabbit(
         ) as mock_get_rabbit:
             mock_get_rabbit.return_value = (rabbit_mock := mock.AsyncMock())
             rabbit_mock.wait_until_ready.return_value = asyncio.Future()
-
-            tl_tracker = _get_trackers(user_config, "/autodl-trackers/trackers")["tl"]
+            tl_tracker = _get_trackers(user_config, f"{tracker_folder_path}/trackers")[
+                "tl"
+            ]
             tl_irc = IRC(tl_tracker, pydle_pool)
             await tl_irc.on_message("#tlannounces", "_AnnounceBot_", message)
             assert mock_announce.called

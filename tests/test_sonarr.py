@@ -1,4 +1,5 @@
 import asyncio
+
 from unittest import mock
 
 import pytest
@@ -8,12 +9,13 @@ from arrnounced.irc import IRC
 
 @mock.patch("arrnounced.message_handler.get_rabbit_client")
 @pytest.mark.asyncio
-async def test_release(mock_get_rabbit, pydle_pool, user_config):
+async def test_release(mock_get_rabbit, pydle_pool, user_config, tracker_folder_path):
+
     mock_get_rabbit.return_value = (rabbit_mock := mock.AsyncMock())
     rabbit_mock.wait_until_ready.return_value = asyncio.Future()
 
     message = "\x02\x0300,04New Torrent Announcement:\x02\x0300,12 <TV :: Episodes HD>  Name:'My Fake Torrent S02E07 1080p x265-Elite' uploaded by 'Anonymous' - \x0301,15 https://www.torrentleech.org/torrent/123456789"
-    tl_tracker = _get_trackers(user_config, "/autodl-trackers/trackers")["tl"]
+    tl_tracker = _get_trackers(user_config, f"{tracker_folder_path}/trackers")["tl"]
     tl_irc = IRC(tl_tracker, pydle_pool)
     with mock.patch("arrnounced.message_handler.notify") as mock_notify:
         await tl_irc.on_message("#tlannounces", "_AnnounceBot_", message)
