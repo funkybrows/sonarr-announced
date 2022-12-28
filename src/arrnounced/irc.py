@@ -1,9 +1,12 @@
+import asyncio
 import logging
 import pydle
 import re
+import signal
 
 from arrnounced import irc_modes
 from arrnounced import message_handler
+from arrnounced import rabbit
 from arrnounced.eventloop_utils import eventloop_util
 
 logger = logging.getLogger("IRC")
@@ -174,6 +177,19 @@ eventloop_util.set_eventloop(pool.eventloop)
 clients = []
 
 
+async def close_connection_and_exit():
+    try:
+        aio_client = rabbit.get_rabbit_client()
+        if not aio_client.is_consuming:
+            await aio_client.wait_until_connected(timeout=10)
+        await aio_client.close()
+    except:
+        logging.exception("COULD NOT CLOSE RABBITMQ CONNECTION")
+    finally:
+        disconnect_all()
+        pool.eventloop.stop()
+
+
 def disconnect_all():
     global pool
     global clients
@@ -209,6 +225,11 @@ def run(trackers):
             logger.exception("Error while connecting to: %s", tracker.config.irc_server)
 
     try:
+        for signame in ("SIGINT", "SIGTERM"):
+            pool.eventloop.add_signal_handler(
+                getattr(signal, signame),
+                lambda: asyncio.create_task(close_connection_and_exit()),
+            )
         pool.handle_forever()
     except Exception:
         logger.exception("Exception pool.handle_forever:")
