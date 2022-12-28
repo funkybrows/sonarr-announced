@@ -2,22 +2,22 @@
 
 [[package]]
 name = "aio-pika"
-version = "8.2.5"
+version = "8.3.0"
 description = "Wrapper for the aiormq for asyncio and humans."
 category = "main"
 optional = false
 python-versions = ">3.6, <4"
 files = [
-    {file = "aio-pika-8.2.5.tar.gz", hash = "sha256:80b7d9f60e6d3970fc1285bf0a40600270a7488d966f916e7f2f750f73063fa1"},
-    {file = "aio_pika-8.2.5-py3-none-any.whl", hash = "sha256:8584c2220af28ebed2339b233d303e98f6a8f105d761a57b5c20a79ae184751a"},
+    {file = "aio-pika-8.3.0.tar.gz", hash = "sha256:c0e2601eda6a1097fe1d33c5f9965a86a27b328ac48914d20c23f675b3ab1797"},
+    {file = "aio_pika-8.3.0-py3-none-any.whl", hash = "sha256:36c4742449f1cbcb83165b3733b090cf88f3d2f7f027225eedb8c7f300b05dde"},
 ]
 
 [package.dependencies]
-aiormq = ">=6.4.0,<6.5.0"
+aiormq = ">=6.6.3,<6.7.0"
 yarl = "*"
 
 [package.extras]
-develop = ["aiomisc (>=16.0,<17.0)", "coverage (!=4.3)", "coveralls", "nox", "pyflakes (<2.5)", "pylava", "pytest", "pytest-cov", "shortuuid", "sphinx", "sphinx-autobuild", "timeout-decorator", "tox (>=2.4)"]
+develop = ["aiomisc (>=16.0,<17.0)", "coverage (!=4.3)", "coveralls", "nox", "pylava", "pytest", "pytest-cov", "shortuuid", "sphinx", "sphinx-autobuild", "timeout-decorator", "tox (>=2.4)"]
 
 [[package]]
 name = "aio-pika-wrapper"
@@ -37,7 +37,7 @@ pika = "^1.3"
 type = "git"
 url = "https://gitlab.com/jayd-tech/aio-pika-wrapper.git#v0.1.1"
 reference = "HEAD"
-resolved_reference = "dd67cf6f88a68b677bb4954041d328783e3c00c4"
+resolved_reference = "3edf1397b17647f2106d772e7d0a586fbc16cdac"
 
 [[package]]
 name = "aiohttp"
@@ -135,22 +135,19 @@ speedups = ["Brotli", "aiodns", "cchardet"]
 
 [[package]]
 name = "aiormq"
-version = "6.4.2"
+version = "6.6.3"
 description = "Pure python AMQP asynchronous client library"
 category = "main"
 optional = false
-python-versions = ">=3.7"
+python-versions = ">=3.7,<4.0"
 files = [
-    {file = "aiormq-6.4.2-py3-none-any.whl", hash = "sha256:fdbf2efed73a2e07437de3af5e3591165efb155a18394dc7295cac9e80943c62"},
-    {file = "aiormq-6.4.2.tar.gz", hash = "sha256:fd815d2bb9d8c950361697a74c1b067bc078726c3ef3b837e979a68a4986b148"},
+    {file = "aiormq-6.6.3-py3-none-any.whl", hash = "sha256:2338e8d150402d791d540dc91aa8dd9db412f48e3083d80a3d03f26c9d9f8bbc"},
+    {file = "aiormq-6.6.3.tar.gz", hash = "sha256:17b0b61b05030041fac2b8fb409a092fd258c446cf3e36d90a14a80b3aa9da4b"},
 ]
 
 [package.dependencies]
 pamqp = "3.2.1"
 yarl = "*"
-
-[package.extras]
-develop = ["aiomisc (>=16.0,<17.0)", "coverage (!=4.3)", "coveralls", "pylava", "pytest", "pytest-cov", "tox (>=2.4)"]
 
 [[package]]
 name = "aiosignal"
