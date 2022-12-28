@@ -1,7 +1,6 @@
 import asyncio
 import html
 import logging
-from pony.orm.core import TransactionError
 
 from arrnounced import announce_parser
 from arrnounced import utils

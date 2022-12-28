@@ -1,13 +1,8 @@
-import os
-import os.path
-import sys
-
 from pathlib import Path
 
 from arrnounced import backend, config, irc, utils
-from manager import _get_trackers, get_tracker_xml_configs
+from manager import _get_trackers
 
-import pika
 
 if __name__ == "__main__":
     trackers_path = f"{utils.get_tracker_folder_path()}/trackers"
