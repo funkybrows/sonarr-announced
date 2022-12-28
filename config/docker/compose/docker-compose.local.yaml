@@ -4,6 +4,7 @@ services:
     image: ${DOCKER_REGISTRY}/${PROJECT_NAME}/${NAMESPACE}:${DOCKER_TAG_VERSION}
     container_name: "${PROJECT_NAME}-${NAMESPACE}"
     environment:
+      CONFIG_FOLDER_PATH: ${CONFIG_FOLDER_PATH}
       RABBITMQ_USER: ${RABBITMQ_USER}
       RABBITMQ_PASS: ${RABBITMQ_PASS}
       RABBITMQ_HOST: ${RABBITMQ_HOST}
@@ -14,6 +15,7 @@ services:
       - "${DOCKER_APP_SOURCE_FROM_COMPOSE}:${DOCKER_APP_DEST}"
       - "${DOCKER_USER_CONFIG_PATH_FROM_COMPOSE}/autodl-trackers/:/root/.arrnounced/autodl-trackers/"
       - "./${DOCKER_USER_CONFIG_PATH_FROM_COMPOSE}/config.toml:/root/.arrnounced/config/config.toml"
+      - "./${DOCKER_USER_CONFIG_PATH_FROM_COMPOSE}/logging.conf:/root/.arrnounced/config/logging.conf"
       - "./logs/:/root/.${PROJECT_NAME}/logs"
     depends_on:
       arrnounced-rabbitmq:
