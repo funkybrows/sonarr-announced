@@ -72,10 +72,9 @@ async def _handle_announcement(tracker, announcement):
     else:
         announcement.snatched()
         logger.info("%s approved release: %s", backend.name, announcement.title)
-
-    rabbit_client = get_rabbit_client()
-    await rabbit_client.wait_until_ready(timeout=60)
-    await rabbit_client.publish_from_announcement(announcement)
+        rabbit_client = get_rabbit_client()
+        await rabbit_client.wait_until_ready(timeout=60)
+        await rabbit_client.publish_from_announcement(announcement)
     #     with db.db_session:
     #         db_announced = db.get_announcement(db_announced.id)
     #         db.insert_snatched(db_announced, announcement.snatch_date, backend.name)
