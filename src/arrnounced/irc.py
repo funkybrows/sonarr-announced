@@ -26,6 +26,14 @@ class IRC(irc_modes.ModesFixer):
         super().__init__(tracker.config.irc_nickname, eventloop=event_loop)
         self.tracker = tracker
 
+    async def _sync_user(self, nick, metadata):
+        # Create user in database.
+        if nick not in self.users:
+            self._create_user(nick)
+            if nick not in self.users:
+                return
+            self.users[nick].update(metadata)
+
     async def connect(self, *args, **kwargs):
         try:
             await super().connect(*args, **kwargs)
