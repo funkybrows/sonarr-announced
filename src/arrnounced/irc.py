@@ -87,6 +87,15 @@ class IRC(irc_modes.ModesFixer):
             logger.info("Identified with NICKSERV (221)")
             await self.attempt_join_channel()
 
+    async def on_raw_001(self, message):
+        logger.debug("Welcome message: %s", message._raw)
+
+    async def on_raw_002(self, message):
+        logger.debug("Identified HOST: %s", message._raw)
+
+    async def on_raw_396(self, message):
+        logger.debug("Set host masking: %s", message._raw)
+
     async def on_raw_900(self, message):
         logger.info("Identified with NICKSERV (900)")
         await self.attempt_join_channel()
