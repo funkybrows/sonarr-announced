@@ -10,6 +10,7 @@ import pytest
 from aio_pika_wrapper.client import AioConnectionPool, AioClient as AioPikaClient
 from tenacity import retry, stop_after_attempt, wait_fixed
 
+from arrnounced import utils
 from arrnounced.irc import IRC
 from arrnounced.manager import _get_trackers
 from arrnounced.rabbit import AioClient
@@ -21,7 +22,7 @@ LOG_FORMAT = (
 
 LOGGER = logging.getLogger(__name__)
 CLIENT_LOGGER = logging.getLogger("aio_pika_wrapper.client")
-handler = logging.FileHandler("/logs/debug.log", mode="w")
+handler = logging.FileHandler(f"{utils.get_log_folder_path()}/debug.log", mode="w")
 LOGGER.setLevel(logging.DEBUG)
 LOGGER.addHandler(handler)
 CLIENT_LOGGER.setLevel(logging.DEBUG)
