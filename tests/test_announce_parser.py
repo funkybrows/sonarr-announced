@@ -1,7 +1,7 @@
 import unittest
 
 from arrnounced import announcement, announce_parser, tracker, tracker_xml_config, utils
-from tracker_xml_config import Ignore
+from arrnounced.tracker_xml_config import Ignore
 from unittest import mock
 
 
